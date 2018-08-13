@@ -86,17 +86,45 @@ def contrast(image, r, m):
                     imgcontrast[i][j][k] = r*(image[i][j][k] - m) + m
         return imgcontrast
 
+def hist(image):
+    if nchannels(image) == 1:
+        hist = np.zeros((256, 1), dtype=np.uint)
+        for i in range(image.shape[0]):
+            for j in range(image.shape[1]):
+                hist[int(image[i][j])] += 1
+        return hist
+    else:
+        hist = np.zeros((256, 3), dtype=np.uint)
+        for i in range(image.shape[0]):
+            for j in range(image.shape[1]):
+                hist[int(image[i][j][0])] += 1
+                hist[int(image[i][j][1])] += 1
+                hist[int(image[i][j][2])] += 1
+        return hist
 
 
+def showhist(hist, bin = 1):
+    x_axis = []
+    for i in range(256): #Begin axis X 0 -> 255
+        x_axis.append(i) #Add in vector position this value
+    if hist.shape[1] == 1:
+        pyp.bar(x_axis, color='black', align='center')
+    else:
+        red_bar = pyp.bar(x_axis, hist.transpose()[0], color='red', align='center')
+        green_bar = pyp.bar(x_axis, hist.transpose()[1], color='green', align='center')
+        blue_bar = pyp.bar(x_axis, hist.transpose()[2], color='blue', align='center')
+        pyp.show()
 
 
 ##Read Image
 img = mread(name)
-#print(img)
+hist = hist(img)
+showhist(hist)
+#print(i# mg)
 #negative = negative(img)
 #print(negative)
-contrast = contrast(img, 2, 10)
-imshow(contrast)
+#contrast = contrast(img, 2, 10)
+#imshow(contrast)
 #tresh = tresh(img, 244)
 #print(tresh)
 #gray = rgb2gray(img)
